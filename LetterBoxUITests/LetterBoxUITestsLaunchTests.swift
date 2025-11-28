@@ -1,10 +1,3 @@
-//
-//  LetterBoxUITestsLaunchTests.swift
-//  LetterBoxUITests
-//
-//  Created by csuftitan on 11/5/25.
-//
-
 import XCTest
 
 final class LetterBoxUITestsLaunchTests: XCTestCase {

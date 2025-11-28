@@ -4,7 +4,7 @@ import GRDB
 struct Database {
     private let writer: DatabaseWriter
 
-    init (_ writer: DatabaseWriter) throws {
+    init(_ writer: DatabaseWriter) throws {
         self.writer = writer
         try migrator.migrate(writer)
     }

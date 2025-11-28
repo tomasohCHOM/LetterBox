@@ -1,11 +1,5 @@
-//
-//  LetterBoxTests.swift
-//  LetterBoxTests
-//
-//  Created by csuftitan on 11/5/25.
-//
-
 import XCTest
+
 @testable import LetterBox
 
 final class LetterBoxTests: XCTestCase {

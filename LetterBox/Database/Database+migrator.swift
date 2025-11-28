@@ -5,7 +5,7 @@ extension Database {
     var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
         #if DEBUG
-        migrator.eraseDatabaseOnSchemaChange = true
+            migrator.eraseDatabaseOnSchemaChange = true
         #endif
         migrator.registerMigration("v1") { db in
             try createCategoryTable(db)
