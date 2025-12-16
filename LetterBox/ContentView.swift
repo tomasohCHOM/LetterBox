@@ -1,9 +1,50 @@
 import SwiftData
 import SwiftUI
 
-struct ContentView: View {
+struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
+    @State private var searchText: String = ""
+
+    private var header: some View {
+        ZStack(alignment: .bottom) {
+            LinearGradient(
+                colors: [.pink, .purple],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .frame(height: 170)
+            .overlay(
+                VStack(alignment: .leading, spacing: 16) {
+                    HStack {
+                        Image(systemName: "sparkles")
+                        Text("LetterBox")
+                            .font(.title2.weight(.semibold))
+                        Spacer()
+                    }
+                    .foregroundColor(.white)
+                    .padding(.horizontal)
+
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.secondary)
+                        TextField("Search your memories...", text: $searchText)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
+                    }
+                    .padding(.horizontal)
+                    .frame(height: 44)
+                    .background(.white)
+                    .clipShape(
+                        RoundedRectangle(cornerRadius: 22, style: .continuous)
+                    )
+                    .padding(.horizontal)
+                    .padding(.bottom, 8)
+                }
+                .padding(.top, 40)
+            )
+        }
+    }
 
     var body: some View {
         NavigationSplitView {
@@ -57,6 +98,6 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    HomeView()
         .modelContainer(for: Item.self, inMemory: true)
 }
