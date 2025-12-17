@@ -5,16 +5,18 @@ struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
     @State private var searchText: String = ""
-
+    @State private var showAddView = false
     // Header
     private var Header: some View {
+        
+        // header with title and search box
         VStack(alignment: .leading, spacing: 10) {
-            // Title
+            // title text
             Text("LetterBox")
                 .font(.largeTitle.weight(.bold))
-                .foregroundColor(.primary)
-                .colorInvert()
+                .foregroundColor(.white)
             
+            // search bar
             HStack {
                 TextField("Search your memories...", text: $searchText)
             }
@@ -23,7 +25,6 @@ struct HomeView: View {
             .cornerRadius(10)
         }
         .padding()
-        // gradient for header colors
         .background(LinearGradient(
             colors: [.pink, .purple],
             startPoint: .topLeading,
@@ -33,39 +34,58 @@ struct HomeView: View {
 
     var body: some View {
         NavigationStack {
-            // stack for the home page
             VStack(spacing: 0) {
                 
                 Header
                 
-                // memories
+                // cards
                 List {
-                    ForEach(items) { item in
-                            Text("New memory")
+                    ForEach(items, id: \.persistentModelID) { item in
+                        HStack {
+                            // Display the image if there are items to show someone
+                            if let data = item.image, let uiImage = UIImage(data: data) {
+                                // put the image in the stack itme
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                            }
+                            
+                            // holds the info for the card, right now it just shows the title and the timestamp
+                            VStack(alignment: .leading) {
+                                Text("Memory captured")
+                                    .font(.headline)
+                                Text(item.timestamp, format: .dateTime)
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                            }
+                        }
                     }
                     .onDelete(perform: deleteItems)
                 }
+                .listStyle(.plain)
             }
+            // top buttons edit and add a card
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     EditButton()
                 }
+                
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: addItem) {
+                    Button(action: { showAddView = true }) {
                         Image(systemName: "plus")
                     }
                 }
             }
+            
+            .sheet(isPresented: $showAddView) {
+                AddMemoryView()
+            }
         }
     }
 
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
+    // deleted selected item
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
