@@ -6,78 +6,56 @@ struct HomeView: View {
     @Query private var items: [Item]
     @State private var searchText: String = ""
 
-    private var header: some View {
-        ZStack(alignment: .bottom) {
-            LinearGradient(
-                colors: [.pink, .purple],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .frame(height: 170)
-            .overlay(
-                VStack(alignment: .leading, spacing: 16) {
-                    HStack {
-                        Image(systemName: "sparkles")
-                        Text("LetterBox")
-                            .font(.title2.weight(.semibold))
-                        Spacer()
-                    }
-                    .foregroundColor(.white)
-                    .padding(.horizontal)
-
-                    HStack {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(.secondary)
-                        TextField("Search your memories...", text: $searchText)
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled()
-                    }
-                    .padding(.horizontal)
-                    .frame(height: 44)
-                    .background(.white)
-                    .clipShape(
-                        RoundedRectangle(cornerRadius: 22, style: .continuous)
-                    )
-                    .padding(.horizontal)
-                    .padding(.bottom, 8)
-                }
-                .padding(.top, 40)
-            )
+    // Header
+    private var Header: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            // Title
+            Text("LetterBox")
+                .font(.largeTitle.weight(.bold))
+                .foregroundColor(.primary)
+                .colorInvert()
+            
+            HStack {
+                TextField("Search your memories...", text: $searchText)
+            }
+            .padding(10)
+            .background(Color(.systemGray6))
+            .cornerRadius(10)
         }
+        .padding()
+        // gradient for header colors
+        .background(LinearGradient(
+            colors: [.pink, .purple],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        ))
     }
 
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text(
-                            "Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))"
-                        )
-                    } label: {
-                        Text(
-                            item.timestamp,
-                            format: Date.FormatStyle(
-                                date: .numeric,
-                                time: .standard
-                            )
-                        )
+        NavigationStack {
+            // stack for the home page
+            VStack(spacing: 0) {
+                
+                Header
+                
+                // memories
+                List {
+                    ForEach(items) { item in
+                            Text("New memory")
                     }
+                    .onDelete(perform: deleteItems)
                 }
-                .onDelete(perform: deleteItems)
             }
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .topBarTrailing) {
                     EditButton()
                 }
-                ToolbarItem {
+                ToolbarItem(placement: .topBarTrailing) {
                     Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+                        Image(systemName: "plus")
                     }
                 }
             }
-        } detail: {
-            Text("Select an item")
         }
     }
 
