@@ -50,7 +50,6 @@ struct AddCardView: View {
                 }
 
 
-                
                 Section("Inside of card") {
                      if data2 != nil {
                         if let image = UIImage(data: data2!) {
@@ -87,7 +86,7 @@ struct AddCardView: View {
                     .disabled(data1 == nil || name == "" || from == "" || data2 == nil || event == "")
                 }
             }
-            // turns the image into data and sets it to selected image variable async
+            // turns the image into data and sets it to selected image variable
             .task(id: photo1) {
                 if let data = try? await photo1?.loadTransferable(type: Data.self) {
                     data1 = data

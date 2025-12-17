@@ -18,8 +18,8 @@ struct CardDetailView: View {
                     .shadow(radius: 5)
                 }
 
-                if item.insideimage != nil {
-                     let image = UIImage(data: item.insideimage!)!
+                if item.insideImage != nil {
+                     let image = UIImage(data: item.insideImage!)!
                     Image(uiImage: image)
                         .resizable()
                          .scaledToFit()
@@ -31,11 +31,12 @@ struct CardDetailView: View {
                 // show the info for the image like from event recieved and created
                  VStack(alignment: .leading, spacing: 8) {
                     Text(item.cardName).font(.title2.weight(.bold))
+                    
                     Text("From \(item.sender)")
                         .font(.body)
                        .foregroundColor(.secondary)
 
-                Text("Event: \(item.event)")
+                    Text("Event: \(item.event)")
                          .font(.body)
                         .foregroundColor(.secondary)
 
