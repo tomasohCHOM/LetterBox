@@ -1,6 +1,6 @@
-import SwiftUI
-import SwiftData
 import PhotosUI
+import SwiftData
+import SwiftUI
 
 struct AddCardView: View {
     @Environment(\.dismiss) private var dismiss
@@ -11,22 +11,28 @@ struct AddCardView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
-                
-                
-                
+
                 // show the image once someone or like user selects it
-                if let selectedImage, let uiImage = UIImage(data: selectedImage) {
+                if let selectedImage, let uiImage = UIImage(data: selectedImage)
+                {
                     Image(uiImage: uiImage)
                         .resizable()
                         .scaledToFit()
                         .frame(height: 300)
                         .cornerRadius(12)
                 } else {
-                    ContentUnavailableView("No Photo Selected", systemImage: "photo.badge.plus")
+                    ContentUnavailableView(
+                        "No Photo Selected",
+                        systemImage: "photo.badge.plus"
+                    )
                 }
-                
+
                 // button to pick photos
-                PhotosPicker(selection: $selectedPhoto, matching: .images, photoLibrary: .shared()) {
+                PhotosPicker(
+                    selection: $selectedPhoto,
+                    matching: .images,
+                    photoLibrary: .shared()
+                ) {
                     Label("Select Photo", systemImage: "photo")
                         .font(.headline)
                         .foregroundColor(.white)
@@ -36,18 +42,18 @@ struct AddCardView: View {
                         .cornerRadius(10)
                 }
                 .padding(.horizontal)
-                
+
                 Spacer()
             }
             .padding()
             .navigationTitle("New Card")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                
+
                 ToolbarItem(placement: .topBarLeading) {
                     Button("Cancel") { dismiss() }
                 }
-                
+
                 // Save Button
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
@@ -59,7 +65,9 @@ struct AddCardView: View {
             }
             // turns the image into data and sets it to selected image variable
             .task(id: selectedPhoto) {
-                if let data = try? await selectedPhoto?.loadTransferable(type: Data.self) {
+                if let data = try? await selectedPhoto?.loadTransferable(
+                    type: Data.self
+                ) {
                     selectedImage = data
                 }
             }
@@ -73,7 +81,6 @@ struct AddCardView: View {
         dismiss()
     }
 }
-
 
 #Preview {
     AddCardView()

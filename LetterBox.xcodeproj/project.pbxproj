@@ -6,10 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		7A3718FB2EDA5BA400CA2C68 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 7A3718FA2EDA5BA400CA2C68 /* GRDB */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
 		7AA1DBF22EBBEE2A00A4B5A2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -46,7 +42,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7A3718FB2EDA5BA400CA2C68 /* GRDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,7 +100,6 @@
 			);
 			name = LetterBox;
 			packageProductDependencies = (
-				7A3718FA2EDA5BA400CA2C68 /* GRDB */,
 			);
 			productName = LetterBox;
 			productReference = 7AA1DBE22EBBEE2500A4B5A2 /* LetterBox.app */;
@@ -184,7 +178,6 @@
 			mainGroup = 7AA1DBD92EBBEE2500A4B5A2;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				7A3718F92EDA5BA400CA2C68 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7AA1DBE32EBBEE2500A4B5A2 /* Products */;
@@ -573,25 +566,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		7A3718F92EDA5BA400CA2C68 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/groue/GRDB.swift.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		7A3718FA2EDA5BA400CA2C68 /* GRDB */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7A3718F92EDA5BA400CA2C68 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
-			productName = GRDB;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7AA1DBDA2EBBEE2500A4B5A2 /* Project object */;
 }

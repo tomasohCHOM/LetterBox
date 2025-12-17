@@ -9,14 +9,14 @@ struct HomeView: View {
     @State private var showAddView = false
     // Header
     private var Header: some View {
-        
+
         // header with title and search box
         VStack(alignment: .leading, spacing: 10) {
             // title text
             Text("LetterBox")
                 .font(.largeTitle.weight(.bold))
                 .foregroundColor(.white)
-            
+
             // search bar
             HStack {
                 TextField("Search your memories...", text: $searchText)
@@ -26,34 +26,41 @@ struct HomeView: View {
             .cornerRadius(10)
         }
         .padding()
-        .background(LinearGradient(
-            colors: [.pink, .purple],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        ))
+        .background(
+            LinearGradient(
+                colors: [.pink, .purple],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
     }
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                
+
                 Header
-                
+
                 // cards
                 List {
                     ForEach(items) { item in
-                        NavigationLink(destination: CardDetailView(item: item)) {
+                        NavigationLink(destination: CardDetailView(item: item))
+                        {
                             HStack {
                                 // Display the image if there are items to show someone
-                                if let data = item.image, let uiImage = UIImage(data: data) {
+                                if let data = item.image,
+                                    let uiImage = UIImage(data: data)
+                                {
                                     // put the image in the stack itme
                                     Image(uiImage: uiImage)
                                         .resizable()
                                         .scaledToFill()
                                         .frame(width: 50, height: 50)
-                                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                                        .clipShape(
+                                            RoundedRectangle(cornerRadius: 8)
+                                        )
                                 }
-                                
+
                                 // holds the info for the card, right now it just shows the title and the timestamp
                                 VStack(alignment: .leading) {
                                     Text("Card captured")
@@ -74,14 +81,14 @@ struct HomeView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     EditButton()
                 }
-                
+
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: { showAddView = true }) {
                         Image(systemName: "plus")
                     }
                 }
             }
-            
+
             .sheet(isPresented: $showAddView) {
                 AddCardView()
             }
