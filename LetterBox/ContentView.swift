@@ -8,6 +8,7 @@ struct HomeView: View {
     @State var searchText: String = ""
      @State var showAddView = false
 
+    @State var currentEvent: String = "All"
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -22,7 +23,21 @@ struct HomeView: View {
                     // search bar
                     HStack {
                          TextField("Search your memories...", text: $searchText)
-                    }
+                        //  filter menu for filtering by event
+                     Menu {
+                         // get all types of events
+                         ForEach(getEventList(), id: \.self) { eventName in
+                             Button(eventName) {
+                                 currentEvent = eventName
+                             }
+                         }
+                     } label: {
+                         // free icon
+                         Image(systemName: "line.3.horizontal.decrease.circle.fill")
+                             .foregroundColor(currentEvent == "All" ? .gray : .purple)
+                             .font(.title2)
+                            }
+                        }
                     .padding(10)
                      .background(Color(.systemGray6))
                     .cornerRadius(10)
@@ -34,19 +49,18 @@ struct HomeView: View {
                      endPoint: .bottomTrailing
                 ))
 
-                // cards
+                // cards, shows by filter if there is one
                 List {
-                    ForEach(items) { item in
+                    ForEach(filterItems()) { item in
                          NavigationLink(destination: CardDetailView(item: item)) {
                             HStack {
                                 // Display the image if there are items to show someone
-                                if item.frontImage != nil {
-                                   // put the image in the stack itme
-                                    let image = UIImage(data: item.frontImage!)!
-                                    Image(uiImage: image).resizable()
+                                if let data = item.image, let image = UIImage(data: data) {
+                                    Image(uiImage: image)
+                                        .resizable()
                                         .scaledToFill()
                                         .frame(width: 50, height: 50)
-                                         .clipShape(RoundedRectangle(cornerRadius: 8))
+                                        .clipShape(RoundedRectangle(cornerRadius: 8))
                                 }
 
                                 // holds the info for the card, shows the title and the timestamp and who its from along with event
@@ -94,6 +108,49 @@ struct HomeView: View {
             }
         }
     }
+    
+    
+    // gets a list of every event by sorting through them
+    func getEventList() -> [String] {
+            var eventList = ["All"]
+            
+            for item in items {
+                // makes sure there are no duplicates
+                if !eventList.contains(item.event) {
+                    eventList.append(item.event)
+                }
+            }
+            return eventList
+        }
+    
+    // filters throughh the items and grabs ones that match selected search properties
+    func filterItems() -> [Item] {
+            var result: [Item] = []
+            
+            for item in items {
+                var matchesSearch = true
+                var matchesEvent = true
+                // matches item even if case is weird
+                if searchText != "" {
+                    if !item.cardName.lowercased().contains(searchText.lowercased()) {
+                        matchesSearch = false
+                    }
+                }
+                
+                // also checks if they filter by events or not
+                if currentEvent != "All" {
+                    if item.event != currentEvent {
+                        matchesEvent = false
+                    }
+                }
+                
+                if matchesSearch && matchesEvent {
+                    result.append(item)
+                }
+            }
+            
+            return result
+        }
 }
 
 #Preview {

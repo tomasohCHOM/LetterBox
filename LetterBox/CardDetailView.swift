@@ -18,8 +18,8 @@ struct CardDetailView: View {
                     .shadow(radius: 5)
                 }
 
-                if item.insideImage != nil {
-                     let image = UIImage(data: item.insideImage!)!
+                if item.insideimage != nil {
+                     let image = UIImage(data: item.insideimage!)!
                     Image(uiImage: image)
                         .resizable()
                          .scaledToFit()
