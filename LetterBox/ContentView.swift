@@ -3,6 +3,7 @@ import SwiftUI
 
 struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
+    // get the data using swiftdata
     @Query private var items: [Item]
     @State private var searchText: String = ""
     @State private var showAddView = false
@@ -40,25 +41,27 @@ struct HomeView: View {
                 
                 // cards
                 List {
-                    ForEach(items, id: \.persistentModelID) { item in
-                        HStack {
-                            // Display the image if there are items to show someone
-                            if let data = item.image, let uiImage = UIImage(data: data) {
-                                // put the image in the stack itme
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 50, height: 50)
-                                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                            }
-                            
-                            // holds the info for the card, right now it just shows the title and the timestamp
-                            VStack(alignment: .leading) {
-                                Text("Memory captured")
-                                    .font(.headline)
-                                Text(item.timestamp, format: .dateTime)
-                                    .font(.caption)
-                                    .foregroundColor(.gray)
+                    ForEach(items) { item in
+                        NavigationLink(destination: CardDetailView(item: item)) {
+                            HStack {
+                                // Display the image if there are items to show someone
+                                if let data = item.image, let uiImage = UIImage(data: data) {
+                                    // put the image in the stack itme
+                                    Image(uiImage: uiImage)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 50, height: 50)
+                                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                                }
+                                
+                                // holds the info for the card, right now it just shows the title and the timestamp
+                                VStack(alignment: .leading) {
+                                    Text("Card captured")
+                                        .font(.headline)
+                                    Text(item.timestamp, format: .dateTime)
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+                                }
                             }
                         }
                     }
@@ -80,7 +83,7 @@ struct HomeView: View {
             }
             
             .sheet(isPresented: $showAddView) {
-                AddMemoryView()
+                AddCardView()
             }
         }
     }

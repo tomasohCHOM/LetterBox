@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 import PhotosUI
 
-struct AddMemoryView: View {
+struct AddCardView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @State private var selectedPhoto: PhotosPickerItem?
@@ -11,6 +11,8 @@ struct AddMemoryView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
+                
+                
                 
                 // show the image once someone or like user selects it
                 if let selectedImage, let uiImage = UIImage(data: selectedImage) {
@@ -74,6 +76,6 @@ struct AddMemoryView: View {
 
 
 #Preview {
-    AddMemoryView()
+    AddCardView()
         .modelContainer(for: Item.self, inMemory: true)
 }
