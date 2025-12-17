@@ -3,74 +3,111 @@ import SwiftData
 import PhotosUI
 
 struct AddCardView: View {
-    @Environment(\.dismiss) private var dismiss
-    @Environment(\.modelContext) private var modelContext
-    @State private var selectedPhoto: PhotosPickerItem?
-    @State private var selectedImage: Data?
+    @Environment(\.dismiss) var dismiss
+    @Environment(\.modelContext) var modelContext
+
+   // simple variable names
+    @State var photo1: PhotosPickerItem?
+    @State var data1: Data?
+
+    @State var name : String=""
+    @State var from:String = ""
+     @State var event: String=""
+    @State var date : Date=Date()
+
+    @State var photo2: PhotosPickerItem?
+      @State var data2: Data?
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 20) {
-                
-                
-                
-                // show the image once someone or like user selects it
-                if let selectedImage, let uiImage = UIImage(data: selectedImage) {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 300)
-                        .cornerRadius(12)
-                } else {
-                    ContentUnavailableView("No Photo Selected", systemImage: "photo.badge.plus")
+            Form {
+                Section("Card Info"){
+                   TextField("Card Name", text: $name)
+                    TextField("From", text: $from)
+                   TextField("Event", text: $event)
+                    DatePicker("Date Received", selection: $date, displayedComponents: .date)
                 }
-                
-                // button to pick photos
-                PhotosPicker(selection: $selectedPhoto, matching: .images, photoLibrary: .shared()) {
-                    Label("Select Photo", systemImage: "photo")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 50)
-                        .background(Color.purple)
-                        .cornerRadius(10)
+
+                Section("Front of card") {
+                    // check if data exists first
+                    if data1 != nil {
+                       if let image = UIImage(data: data1!) {
+                            Image(uiImage: image).resizable()
+                                .scaledToFit()
+                                 .frame(height: 200)
+                                .cornerRadius(8)
+                        }
+                    }
+
+                    PhotosPicker(selection: $photo1, matching: .images) {
+                        // basic if else for label
+                        if data1 == nil {
+                            Label("Select Front Photo", systemImage: "photo")
+                        } else {
+                             Label("Change Front Photo", systemImage: "photo")
+                        }
+                    }
                 }
-                .padding(.horizontal)
+
+
                 
-                Spacer()
+                Section("Inside of card") {
+                     if data2 != nil {
+                        if let image = UIImage(data: data2!) {
+                            Image(uiImage: image).resizable()
+                                .scaledToFit()
+                                .frame(height: 200)
+                                 .cornerRadius(8)
+                        }
+                    }
+
+                    PhotosPicker(selection: $photo2, matching: .images) {
+                        if data2 == nil {
+                            Label("Select Inside Photo", systemImage: "photo")
+                        } else {
+                           Label("Change Inside Photo", systemImage: "photo")
+                        }
+                    }
+                }
             }
-            .padding()
             .navigationTitle("New Card")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                
+
                 ToolbarItem(placement: .topBarLeading) {
                     Button("Cancel") { dismiss() }
                 }
-                
+
                 // Save Button
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
                         saveCard()
                     }
                     // only alloww save when you select an image for the card
-                    .disabled(selectedImage == nil)
+                    .disabled(data1 == nil || name == "" || from == "" || data2 == nil || event == "")
                 }
             }
-            // turns the image into data and sets it to selected image variable
-            .task(id: selectedPhoto) {
-                if let data = try? await selectedPhoto?.loadTransferable(type: Data.self) {
-                    selectedImage = data
+            // turns the image into data and sets it to selected image variable async
+            .task(id: photo1) {
+                if let data = try? await photo1?.loadTransferable(type: Data.self) {
+                    data1 = data
+                }
+            }
+
+             .task(id: photo2) {
+                if let data = try? await photo2?.loadTransferable(type: Data.self) {
+                     data2 = data
                 }
             }
         }
     }
     // saves card and adds it to context
     func saveCard() {
-        guard let data = selectedImage else { return }
-        let newItem = Item(timestamp: Date(), image: data)
-        modelContext.insert(newItem)
-        dismiss()
+        if data1 != nil {
+            let item = Item(timestamp: Date(), image: data1, insideimage: data2, cardName: name, sender: from, event: event, dateReceived: date)
+            modelContext.insert(item)
+            dismiss()
+        }
     }
 }
 

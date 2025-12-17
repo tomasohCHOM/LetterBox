@@ -54,11 +54,14 @@ struct HomeView: View {
                                         .clipShape(RoundedRectangle(cornerRadius: 8))
                                 }
                                 
-                                // holds the info for the card, right now it just shows the title and the timestamp
+                                // holds the info for the card, shows the title and the timestamp and who its from along with event
                                 VStack(alignment: .leading) {
-                                    Text("Card captured")
+                                    Text(item.cardName)
                                         .font(.headline)
                                     Text(item.timestamp, format: .dateTime)
+                                        .font(.caption)
+                                        .foregroundColor(.gray)
+                                    Text("From \(item.sender) for \(item.event)")
                                         .font(.caption)
                                         .foregroundColor(.gray)
                                 }
